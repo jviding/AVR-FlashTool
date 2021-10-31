@@ -1,5 +1,5 @@
 # Installation
-You should have a Raspberry Pi set up with Raspbian.
+You should have a Raspberry Pi set up with Raspbian.<br>
 Here Raspberry Pi model 3B+ is used with Raspbian Buster 2021-05-07.
 
 ## 1. Install avrdude
