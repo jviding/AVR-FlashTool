@@ -1,14 +1,14 @@
-## Installation
+# Installation
 You should have a Raspberry Pi set up with Raspbian.
 Here Raspberry Pi model 3B+ is used with Raspbian Buster 2021-05-07.
 
-# 1. Install avrdude
+## 1. Install avrdude
 Install prerequisites:
-$ sudo apt update && sudo apt upgrade -y
-$ sudo apt install bison automake autoconf flex gcc-avr binutils-avr avr-libc -y
+>$ sudo apt update && sudo apt upgrade -y
+>$ sudo apt install bison automake autoconf flex gcc-avr binutils-avr avr-libc -y
 
 Clone Kevin Cuzner's version of avrdude, which allows on-board SPI hardware as programmer.
-$ git clone https://github.com/kcuzner/avrdude
+>$ git clone https://github.com/kcuzner/avrdude
 
 Then navigate to the directory with the installation scripts and run them:
 $ cd avrdude/avrdude
@@ -16,7 +16,7 @@ $ ./bootstrap
 $ ./configure
 $ sudo make install
 
-# 2. Wire up the microcontroller
+## 2. Wire up the microcontroller
 Here Atmel Attiny85-20PU is used.
 
 Attiny85            ->                  ->  Raspberry Pi
