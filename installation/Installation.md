@@ -7,7 +7,7 @@ Install prerequisites:
 >$ sudo apt update && sudo apt upgrade -y <br>
 >$ sudo apt install bison automake autoconf flex gcc-avr binutils-avr avr-libc -y
 
-Clone Kevin Cuzner's version of avrdude, which allows on-board SPI hardware as programmer.
+Clone Kevin Cuzner's version of avrdude, which allows on-board SPI hardware as programmer:
 >$ git clone https://github.com/kcuzner/avrdude
 
 Then navigate to the directory with the installation scripts and run them:
@@ -19,16 +19,16 @@ Then navigate to the directory with the installation scripts and run them:
 ## 2. Wire up the microcontroller
 Here Atmel Attiny85-20PU is used.
 
-Attiny85            ->                  ->  Raspberry Pi
----------------------------------------------------------
->Pin 1: PB5 (RESET) -> add 1kΩ resistor ->  Pin 15: GPIO22 (GPIO_GEN3) <br>
->Pin 2: PB3 <br>
->Pin 3: PB4 <br>
->Pin 4: GND         ->                  ->  Pin 39: Ground <br>
->Pin 5: PB0 (MOSI)  -> add 1kΩ resistor ->  Pin 19: GPIO10 (SPI_MOSI) <br>
->Pin 6: PB1 (MISO)  -> add 1kΩ resistor ->  Pin 21: GPIO09 (SPI_MISO) <br>
->Pin 7: PB2 (SCK)   -> add 1kΩ resistor ->  Pin 23: GPIO11 (SPI_CLK) <br>
->Pin 8: VCC         ->                  ->  Pin 01: 3.3v (DC Power)
+Attiny85| | Raspberry Pi
+--------|-|-------------
+Pin 1: PB5 (RESET) | -> add 1kΩ resistor -> |  Pin 15: GPIO22 (GPIO_GEN3)
+>Pin 2: PB3        |                        |
+>Pin 3: PB4        |                        |
+>Pin 4: GND        | ->                  -> | Pin 39: Ground
+>Pin 5: PB0 (MOSI) | -> add 1kΩ resistor -> | Pin 19: GPIO10 (SPI_MOSI)
+>Pin 6: PB1 (MISO) | -> add 1kΩ resistor -> | Pin 21: GPIO09 (SPI_MISO)
+>Pin 7: PB2 (SCK)  | -> add 1kΩ resistor -> | Pin 23: GPIO11 (SPI_CLK)
+>Pin 8: VCC        | ->                  -> | Pin 01: 3.3v (DC Power)
 
 # 3. Test the connection
 Pull the Attiny85 reset pin low:
