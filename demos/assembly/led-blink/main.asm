@@ -20,14 +20,14 @@ toggle:
     RET
 
 delay:                  ; Clock is 1Mhz = 1.000.000 cycles / second
-    ldi R24, 6          ; +1 cycle
-    ldi R25, 19         ; +1 cycle
-    ldi R26, 174        ; +1 cycle
+    ldi R24, 6          ; 1 cycle
+    ldi R25, 19         ; 1 cycle
+    ldi R26, 174        ; 1 cycle
 dell:                   
-    dec R26     ; First: 173*(1+2)+(1+1) = +521 cycles
-    BRNE dell   ; Then: (1+2)+254*(1+2)+(1+1) = +767 cycles
-    dec R25     ; First: (521+1+2)+17*(767+1+2)+(767+1+1) = +14.383 cycles
-    BRNE dell   ; Then: (767+1+2)+254*(767+1+2)+(767+1+1) = +197.119 cycles
-    dec R24     ; (14383+1+2)+4*(197119+1+2)+(197119+1+1) = +999.995 cycles
-    BRNE dell   ; Total is 999.995 + 3 (ldi) + 3 (ret) = +1.000.001 cycles
+    dec R26     ; First: 173*(1+2)+(1+1) = 521 cycles
+    BRNE dell   ; Then: (1+2)+254*(1+2)+(1+1) = 767 cycles
+    dec R25     ; First: (521+1+2)+17*(767+1+2)+(767+1+1) = 14.383 cycles
+    BRNE dell   ; Then: (767+1+2)+254*(767+1+2)+(767+1+1) = 197.119 cycles
+    dec R24     ; (14383+1+2)+4*(197119+1+2)+(197119+1+1) = 999.995 cycles
+    BRNE dell   ; Total is 999.995 + 3 (ldi) + 3 (ret) = 1.000.001 cycles
     RET         ; Thus, delay is cycles/clock = 1000001/1000000 = 1s
