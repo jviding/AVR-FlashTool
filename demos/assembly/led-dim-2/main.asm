@@ -1,53 +1,92 @@
 ;*** This program is written for Attiny85 ***
-; Blink an LED with a high frequency.
-; Modifying the pulse width allows dimming the LED between dark and bright.
-; LED is connected to PB3 (OC1B / pin 2).
+; Blink multiple LEDs with a high frequency.
+; Modifying the pulse width allows dimming the LEDs between dark and bright.
+; LEDs are connected to:
+;   - PB0 (OC0A / pin 5)
+;   - PB1 (OC0B / pin 6)
+;   - PB3 (OC1B inverted / pin 2)
+;   - PB4 (OC1B non-inverted / pin 3)
 
 .nolist
 .include "tn85def.inc"
 .list
 
+.equ  AddrR20 = 0x0014  ; SRAM address of R20
+.equ  AddrR21 = 0x0015  ; SRAM address of R21
+.equ  AddrR22 = 0x0016  ; SRAM address of R22
+
 main:
-    ldi R16, (1<<CS12 | 1<<CS10)
-    out TCCR1, R16          ; Set timer-1 prescaler to /16
+  ldi R16, (1<<PB0 | 1<<PB1 | 1<<PB3 | 1<<PB4)
+  out DDRB, R16     ; Set PBx as output to enable PWM generation    
+timer0:
+  ldi R16, (1<<CS01) 
+  out TCCR0B, R16   ; Prescaler to /8
+  ldi R16, 85
+  out OCR0A, R16    ; Set counter TOP for OC0A
+  ldi R16, 165
+  out OCR0B, R16    ; Set counter TOP for OC0B
+  ldi R16, (1<<WGM00 | 1<<WGM01 | 1<<COM0A1 | 1<<COM0B1 | 1<<COM0A0 | 1<<COM0B0)
+  out TCCR0A, R16   ; Fast PWM with 0xFF as TOP in inverting mode (clear at BOTTOM)
+timer1:
+  ldi R16, (1<<CS12)
+  out TCCR1, R16    ; Prescaler to /8 (to match with timer0)
+  ldi R16, 245    
+  out OCR1B, R16    ; Set counter TOP for OC1B
+  ldi R16, 255
+  out OCR1C, R16    ; Set counter TOP to 0xFF (to match with timer0)
+  ldi R16, (1<<PWM1B | 1<<COM1B0)
+  out GTCCR, R16    ; Fast PWM with OCR1C as TOP
 
-    ldi R16, 190            ; Set counter compare value
-    out OCR1B, R16          ; LOW when 0-190, HIGH when 190-199
-
-    ldi R16, 199
-    out OCR1C, R16          ; Set counter TOP (with /16 prescaler gives 20kHz)
-
-    ldi R16, (1<<PB3)
-    out DDRB, R16           ; Set PB3(OC1B) as output to enable PWM generation
-
-    ldi R16, (1<<PWM1B | 1<<COM1B0)
-    out GTCCR, R16          ; Set timer-1 to PWM Mode with output from PB3(OC1B)
-
+dimmer:
+  ldi R20, 1        ; OCR0A (+1 to brighten, -1 to darken)
+  ldi R21, 1        ; OCR0B (+1 to brighten, -1 to darken)
+  ldi R22, 1        ; OCR1B (PB4 is PB3 inverted)
 loop:
-    rcall brighten
-    rcall darken
-      rjmp loop
+  rcall pause
+  rcall led1
+  rcall led2
+  rcall led3
+    rjmp loop
 
-brighten:
-    in R17, OCR1B       ; Read counter compare value
-loop1:
-    rcall pause
-    inc R17             ; Increment counter compare value
-    out OCR1B, R17      ; Write new counter compare value
-    in R18, OCR1C       ; Read counter TOP value
-    cp R18, R17         ; Compare TOP with ORC1B
-      brne loop1        ; Loop if not equal
-      ret
+led1:                   ; PB0
+  in R16, OCR0A
+  add R16, R20          ; Brighten or darken
+  out OCR0A, R16        ; Write new OCR0A
+  ldi XL, LOW(AddrR20)  
+  ldi XH, HIGH(AddrR20) ; Set X-pointer to R20
+  rcall update
+    ret
 
-darken:
-    in R17, OCR1B       ; Read counter compare value
-loop2:
-    rcall pause
-    dec R17             ; Decrement counter compare value
-    out OCR1B, R17      ; Write new counter compare value
-    cpi R17, 0          ; Compare ORC1B to BOTTOM (zero)
-      brne loop2        ; Loop if not equal
-      ret
+led2:                   ; PB1
+  in R16, OCR0B
+  add R16, R21          ; Brighten or darken
+  out OCR0B, R16        ; Write new OCR0B
+  ldi XL, LOW(AddrR21)  
+  ldi XH, HIGH(AddrR21) ; Set X-pointer to R21
+  rcall update
+    ret
+
+led3:                   ; PB3 & PB4 inversed
+  in R16, OCR1B
+  add R16, R22          ; Brighten or darken
+  out OCR1B, R16        ; Write new OCR1B
+  ldi XL, LOW(AddrR22)  
+  ldi XH, HIGH(AddrR22) ; Set X-pointer to R22
+  rcall update
+    ret
+
+update:
+  cpi R16, 0
+    brne continue   ; If BOTTOM not reached then continue
+  ldi R17, 1
+  st X, R17         ; Else start brightening     
+continue:
+  cpi R16, 255      
+    brne end        ; If TOP not reached then end
+  ldi R17, 255      ; 255 equals -1 in 8-bit systems
+  st X, R17         ; Else start darkening
+end:
+    ret
 
 pause:
     in R16, TIFR        ; Read timer
