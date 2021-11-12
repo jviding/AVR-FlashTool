@@ -1,6 +1,8 @@
 import React from 'react'
 import style from './editor.module.scss'
 
+import Console from '../console/console'
+
 interface Props {
     filename: string
 }
@@ -32,7 +34,7 @@ export default class Editor extends React.Component <Props, IState> {
             ''
         ].map((text, index) => {
             return (
-                <div key={index} className={style.codeLine}>{text}</div>
+                <div key={index} className={style.line}>{text}</div>
             )
         })
     }
@@ -40,9 +42,9 @@ export default class Editor extends React.Component <Props, IState> {
     getRowNumbers() {
         const rowCount = this.getDefaultCodeLines().length + this.getTextAreaRowCount()
         return Array.from(Array(rowCount), (_, index) => {
-            let className = style.rowNumber
+            let className = style.line
             if (index === this.getDefaultCodeLines().length) {
-                className = `${style.rowNumber} ${style.extraPaddingTop}`
+                className = style.lineExtraPaddingTop
             }
             return (
                 <div key={index} className={className}>{index+1}</div>
@@ -61,29 +63,33 @@ export default class Editor extends React.Component <Props, IState> {
 
                 <div className={style.row}>
                     <div className={style.cell}>
-                        Target MCU:
+                        <h3>Target MCU:</h3>
                     </div>
                     <div className={style.cell}>
-                        ATtiny85 (at85def.asm)
+                        <select>
+                            <option value="at85def.asm" selected>ATtiny85</option>
+                            <option value="asd2">asd1234</option>
+                            <option value="asd2">asd12345</option>
+                        </select>
                     </div>
-                    <div className={style.expand}></div>
+                    <div className={style.cellExpanded}></div>
                     <div className={style.cell}>
-                        Build
+                        <button>Build</button>
                     </div>
                     <div className={style.cell}>
-                        Flash
+                        <button>Flash</button>
                     </div>
                 </div>
-                <br/><br/>
                 
-                <div className={style.editor}>
-                    <div className={style.leftSide}>
+                <br/>
+                <br/>
+                
+                <div className={style.row}>
+                    <div className={`${style.cell} ${style.numbering}`}>
                         {this.getRowNumbers()}
                     </div>
-                    <div className={style.rightSide}>
-                        <div className={style.defaultCode}>
-                            {this.getDefaultCodeLines()}
-                        </div>
+                    <div className={style.cellExpanded}>
+                        {this.getDefaultCodeLines()}
                         <textarea
                             rows={this.getTextAreaRowCount()}
                             value={this.state.code}
@@ -91,6 +97,11 @@ export default class Editor extends React.Component <Props, IState> {
                         </textarea>
                     </div>
                 </div>
+
+                <br/>
+
+                <Console some={'asd'} />
+
             </div>
         )
     }

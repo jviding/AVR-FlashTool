@@ -17,7 +17,7 @@ export default class NavBar extends React.Component <Props, IState> {
     }
 
     state: IState = {
-        views: ['Projects', 'Editor', 'Console']
+        views: ['Projects', 'Editor']
     }
 
     getNavBarOptions() {

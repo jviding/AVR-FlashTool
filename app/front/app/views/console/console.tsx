@@ -14,8 +14,18 @@ export default class Console extends React.Component <Props> {
 
     render(): JSX.Element {
         return (
-            <div className={style.container}>
-                <div>Outputs from device...</div>
+            <div>
+                <h3>Console</h3>
+                <div className={style.container}>
+                    <div className={style.line}>
+                        <div className={style.time}>
+                            123:
+                        </div>
+                        <div className={style.message}>
+                            asdasd
+                        </div>
+                    </div>
+                </div>
             </div>
         )
     }
