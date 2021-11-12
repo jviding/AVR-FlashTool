@@ -1,5 +1,5 @@
 import React from 'react'
-import style from "./editor.module.scss"
+import style from './editor.module.scss'
 
 interface Props {
     filename: string
