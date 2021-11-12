@@ -25,7 +25,7 @@ export default class NavBar extends React.Component <Props, IState> {
             return (
                 <div
                     key={index}
-                    className={this.props.viewActive === view ? `${style.option} ${style.active}` : style.option}
+                    className={this.props.viewActive === view ? `${style.cell} ${style.active}` : style.cell}
                     onClick={() => this.props.setView(view)}>
                     {view}
                 </div>
@@ -37,6 +37,7 @@ export default class NavBar extends React.Component <Props, IState> {
         return (
             <div className={style.navbar}>
                 {this.getNavBarOptions()}
+                <div className={style.extendedCell}></div>
             </div>
         )
     }

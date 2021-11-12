@@ -24,9 +24,17 @@ class Main extends React.Component <unknown, IState> {
     render() {
         return (
             <div className={style.app}>
-                <NavBar viewActive={this.state.view} setView={this.setView.bind(this)} />
-                {this.state.view === 'Projects' && <Projects some={'asd'} />}
-                {this.state.view === 'Editor' && <Editor filename={'asd'} />}
+                <div className={style.nav}>
+                    <NavBar 
+                        viewActive={this.state.view} 
+                        setView={this.setView.bind(this)} />
+                </div>
+                <div className={style.view}>
+                    <div className={style.container}>
+                        {this.state.view === 'Projects' && <Projects some={'asd'} />}
+                        {this.state.view === 'Editor' && <Editor filename={'asd'} />}
+                    </div>
+                </div>
             </div>
         )
     }
