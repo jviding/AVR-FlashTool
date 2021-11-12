@@ -1,13 +1,13 @@
 import React from 'react'
-import style from './home.module.scss'
+import style from './projects.module.scss'
 
-interface TestProps {
+interface Props {
     some: string
 }
 
-export default class Home extends React.Component <TestProps> {
+export default class Projects extends React.Component <Props> {
 
-    constructor(props: TestProps) {
+    constructor(props: Props) {
         super(props)
         this.state = {}
     }
