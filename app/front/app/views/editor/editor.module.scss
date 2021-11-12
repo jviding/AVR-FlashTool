@@ -1,6 +1,21 @@
-.editor {
+.container {
     position: relative;
     display: inline-block;
-    
-    width: 80%;
+    width: 100%;
+    height: 100%;
+    background: #bfbfbf;
+    text-align: center;
+
+    .editor {
+        position: relative;
+        display: inline-block;
+        width: 80%;
+        height: 100%;
+        background: white;
+        text-align: left;
+        padding-top: 30px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
 }

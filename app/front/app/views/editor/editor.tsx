@@ -20,9 +20,19 @@ export default class Editor extends React.Component <Props, IState> {
     }
 
     render(): JSX.Element {
+
+        const str1 = "*** This program is written for Attiny85 ***"
+        const str2 = '.nolist \n.include "tn85def.inc" \n.list'
+        const str3 = "main:\n*** Write your code here ***"
+
         return (
-            <div className={style.navbar}>
-                asd
+            <div className={style.container}>
+                <div className={style.editor}>
+                    Target MCU:
+                    {str1}
+                    {str2}
+                    {str3}
+                </div>
             </div>
         )
     }
