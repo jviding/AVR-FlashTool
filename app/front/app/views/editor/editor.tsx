@@ -27,12 +27,10 @@ export default class Editor extends React.Component <Props, IState> {
 
         return (
             <div className={style.container}>
-                <div className={style.editor}>
-                    Target MCU:
-                    {str1}
-                    {str2}
-                    {str3}
-                </div>
+                Target MCU:
+                {str1}
+                {str2}
+                {str3}
             </div>
         )
     }

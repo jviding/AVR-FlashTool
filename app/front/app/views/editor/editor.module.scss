@@ -1,21 +1,11 @@
 .container {
     position: relative;
     display: inline-block;
-    width: 100%;
+    width: 80%;
     height: 100%;
-    background: #bfbfbf;
-    text-align: center;
-
-    .editor {
-        position: relative;
-        display: inline-block;
-        width: 80%;
-        height: 100%;
-        background: white;
-        text-align: left;
-        padding-top: 30px;
-        padding-left: 30px;
-        padding-right: 30px;
-    }
-
+    background: white;
+    text-align: left;
+    padding-top: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
 }

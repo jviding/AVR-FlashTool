@@ -15,9 +15,7 @@ export default class Console extends React.Component <Props> {
     render(): JSX.Element {
         return (
             <div className={style.container}>
-                <div className={style.outputs}>
-                    <div>Outputs from device...</div>
-                </div>
+                <div>Outputs from device...</div>
             </div>
         )
     }
