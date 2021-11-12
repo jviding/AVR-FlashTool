@@ -5,7 +5,7 @@ interface TestProps {
     some: string
 }
 
-export default class Test extends React.Component <TestProps> {
+export default class Home extends React.Component <TestProps> {
 
     constructor(props: TestProps) {
         super(props)

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import style from "./main.module.scss"
 
 import NavBar from "./views/navbar/navbar"
-import Test from './views/home/home'
+import Editor from "./views/editor/editor"
 
 interface IState {
     view: string
@@ -12,7 +12,7 @@ interface IState {
 class Main extends React.Component <unknown, IState> {
     
     state: IState = {
-        view: 'Projects'
+        view: 'Editor'
     }
 
     setView(newView: string) {
@@ -24,8 +24,7 @@ class Main extends React.Component <unknown, IState> {
         return (
             <div className={style.app}>
                 <NavBar viewActive={this.state.view} setView={this.setView.bind(this)} />
-                <div className={style.x}>Some</div>
-                <Test some="World!" />
+                {this.state.view === 'Editor' && <Editor filename={'asd'} />}
             </div>
         )
     }
