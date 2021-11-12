@@ -1,0 +1,19 @@
+.navbar {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+
+    background: black;
+
+    .option {
+        position: relative;
+        display: inline-block;
+        white-space: nowrap;
+        padding: 10px 20px;
+
+        &:hover {
+            background: #262626;
+            cursor: pointer;
+        }
+    }
+}
