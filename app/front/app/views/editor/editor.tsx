@@ -6,7 +6,9 @@ interface Props {
 }
 
 interface IState {
-    some: string
+    mcuName: string,
+    mcuLib: string,
+    code: string
 }
 
 export default class Editor extends React.Component <Props, IState> {
@@ -16,21 +18,79 @@ export default class Editor extends React.Component <Props, IState> {
     }
 
     state: IState = {
-        some: 'string'
+        mcuName: 'ATtiny85',
+        mcuLib: 'tn85def.inc',
+        code: 'main:\n; *** Write your code here ***'
+    }
+
+    getDefaultCodeLines() {
+        return [
+            `; *** This program is written for ${this.state.mcuName} ***`,
+            '.nolist',
+            `.include "${this.state.mcuLib}"`,
+            '.list',
+            ''
+        ].map((text, index) => {
+            return (
+                <div key={index} className={style.codeLine}>{text}</div>
+            )
+        })
+    }
+
+    getRowNumbers() {
+        const rowCount = this.getDefaultCodeLines().length + this.getTextAreaRowCount()
+        return Array.from(Array(rowCount), (_, index) => {
+            let className = style.rowNumber
+            if (index === this.getDefaultCodeLines().length) {
+                className = `${style.rowNumber} ${style.extraPaddingTop}`
+            }
+            return (
+                <div key={index} className={className}>{index+1}</div>
+            )
+        })
+    }
+
+    getTextAreaRowCount() {
+        const count = this.state.code.split('\n').length
+        return count > 10 ? count : 10
     }
 
     render(): JSX.Element {
-
-        const str1 = "*** This program is written for Attiny85 ***"
-        const str2 = '.nolist \n.include "tn85def.inc" \n.list'
-        const str3 = "main:\n*** Write your code here ***"
-
         return (
             <div className={style.container}>
-                Target MCU:
-                {str1}
-                {str2}
-                {str3}
+
+                <div className={style.row}>
+                    <div className={style.cell}>
+                        Target MCU:
+                    </div>
+                    <div className={style.cell}>
+                        ATtiny85 (at85def.asm)
+                    </div>
+                    <div className={style.expand}></div>
+                    <div className={style.cell}>
+                        Build
+                    </div>
+                    <div className={style.cell}>
+                        Flash
+                    </div>
+                </div>
+                <br/><br/>
+                
+                <div className={style.editor}>
+                    <div className={style.leftSide}>
+                        {this.getRowNumbers()}
+                    </div>
+                    <div className={style.rightSide}>
+                        <div className={style.defaultCode}>
+                            {this.getDefaultCodeLines()}
+                        </div>
+                        <textarea
+                            rows={this.getTextAreaRowCount()}
+                            value={this.state.code}
+                            onChange={(event) => this.setState({ code: event.target.value })}>
+                        </textarea>
+                    </div>
+                </div>
             </div>
         )
     }

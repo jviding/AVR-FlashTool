@@ -8,4 +8,69 @@
     padding-top: 30px;
     padding-left: 30px;
     padding-right: 30px;
+
+    .row {
+        position: relative;
+        display: table-row;
+        width: 100%;
+
+        .cell {
+            display: table-cell;
+            width: 1px;
+        }
+
+        .expand {
+            display: table-cell;
+            width: 100%;
+        }
+
+    }
+
+    .editor {
+        @extend .row;
+
+        .leftSide {
+            display: table-cell;
+            width: 1px;
+            text-align: right;
+            vertical-align: top;
+            padding-right: 5px;
+
+            .rowNumber {
+                display: inline-block;
+                width: 100%;
+                padding-bottom: 2px;
+                padding-top: 2px;
+            }
+            .extraPaddingTop {
+                padding-top: 3px;
+            }
+        }
+
+        .rightSide {
+            display: table-cell;
+            width: 100%;
+
+            .defaultCode {
+                display: inline-block;
+                width: 100%;
+
+                .codeLine {
+                    @extend .defaultCode;
+                    padding-bottom: 2px;
+                    padding-top: 2px;
+                }
+            }
+
+            textarea {
+                display: inline-block;
+                width: 100%;
+                cursor: text;
+                overflow: auto;
+                resize: none;
+                font-family: Ubuntu, sans-serif;
+                line-height: 23px;
+            }
+        }
+    }
 }
