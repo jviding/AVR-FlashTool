@@ -6,21 +6,24 @@ import NavBar from "./views/navbar/navbar"
 import Test from './views/home/home'
 
 interface IState {
-    views: string[],
-    viewActive: string
+    view: string
 }
 
 class Main extends React.Component <unknown, IState> {
     
     state: IState = {
-        views: ['Projects', 'Editor', 'Console'],
-        viewActive: 'Projects'
+        view: 'Projects'
+    }
+
+    setView(newView: string) {
+        this.setState({ view: newView })
+        console.log(newView)
     }
 
     render() {
         return (
             <div className={style.app}>
-                <NavBar options={this.state.views} active={this.state.viewActive} />
+                <NavBar viewActive={this.state.view} setView={this.setView.bind(this)} />
                 <div className={style.x}>Some</div>
                 <Test some="World!" />
             </div>

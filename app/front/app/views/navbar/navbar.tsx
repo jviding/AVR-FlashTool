@@ -2,34 +2,41 @@ import React from 'react'
 import style from './navbar.module.scss'
 
 interface Props {
-    options: string[],
-    active: string
+    viewActive: string,
+    setView(newView: string): void
 }
 
-export default class Test extends React.Component <Props> {
+interface IState {
+    views: string[]
+}
+
+export default class NavBar extends React.Component <Props, IState> {
 
     constructor(props: Props) {
         super(props)
-        this.state = {}
     }
 
-    render(): JSX.Element {
+    state: IState = {
+        views: ['Projects', 'Editor', 'Console']
+    }
 
-        const OPTIONS = this.props.options.map((option, index) => {
-            let className = `${style.option}`
-            if (this.props.active == option) {
-                className = `${style.option}`
-            }
+    getNavBarOptions() {
+        return this.state.views.map((view, index) => {
             return (
-                <div key={index} className={className}>
-                    {option}
+                <div
+                    key={index}
+                    className={this.props.viewActive === view ? `${style.option} ${style.active}` : style.option}
+                    onClick={() => this.props.setView(view)}>
+                    {view}
                 </div>
             )
         })
+    }
 
+    render(): JSX.Element {
         return (
             <div className={style.navbar}>
-                {OPTIONS}
+                {this.getNavBarOptions()}
             </div>
         )
     }
