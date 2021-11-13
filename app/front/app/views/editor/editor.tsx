@@ -99,11 +99,7 @@ export default class Editor extends React.Component <Props, IState> {
                         </div>
                     </div>
                 </div>
-
-                <br/>
-
                 <Console some={'asd'} />
-
             </div>
         )
     }
