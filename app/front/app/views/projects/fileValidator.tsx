@@ -16,5 +16,4 @@ export function isValidFilename(filename: string): Promise<string> {
     }
 
     return validateLength().then(validateFormat)
-
 }
