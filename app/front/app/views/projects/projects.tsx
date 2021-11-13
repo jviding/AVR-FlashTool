@@ -16,8 +16,10 @@ export default class Projects extends React.Component <Props> {
         return (
             <div className={style.container}>
                 <h1>Projects</h1>
-                <div>Create new</div>
-                <h2>Or choose existing</h2>
+                <div>Current project: XXX</div>
+                <h3>New project</h3>
+                <div>Create!</div>
+                <h3>Open project</h3>
                 <div>Enter name(.asm), choose mcu</div>
             </div>
         )

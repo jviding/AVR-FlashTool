@@ -60,41 +60,43 @@ export default class Editor extends React.Component <Props, IState> {
     render(): JSX.Element {
         return (
             <div className={style.container}>
-
-                <div className={style.row}>
-                    <div className={style.cell}>
-                        <h3>Target MCU:</h3>
-                    </div>
-                    <div className={style.cell}>
-                        <select>
-                            <option value="at85def.asm" selected>ATtiny85</option>
-                            <option value="asd2">asd1234</option>
-                            <option value="asd2">asd12345</option>
-                        </select>
-                    </div>
-                    <div className={style.cellExpanded}></div>
-                    <div className={style.cell}>
-                        <button>Build</button>
-                    </div>
-                    <div className={style.cell}>
-                        <button>Flash</button>
+                <div>
+                    <div className={style.row}>
+                        <div className={style.cell}>
+                            <h1>Editor</h1>
+                        </div>
+                        <div className={style.cellExpanded}></div>
+                        <div className={style.cell}>
+                            <h3 className={style.nowrap}>Target MCU:</h3>
+                        </div>
+                        <div className={style.cell}>
+                            <select>
+                                <option value="at85def.asm" selected>ATtiny85</option>
+                                <option value="asd2">asd1234</option>
+                                <option value="asd2">asd12345</option>
+                            </select>
+                        </div>
+                        <div className={style.cell}>
+                            <button>Build</button>
+                        </div>
+                        <div className={style.cell}>
+                            <button>Flash</button>
+                        </div>
                     </div>
                 </div>
-                
-                <br/>
-                <br/>
-                
-                <div className={style.row}>
-                    <div className={`${style.cell} ${style.numbering}`}>
-                        {this.getRowNumbers()}
-                    </div>
-                    <div className={style.cellExpanded}>
-                        {this.getDefaultCodeLines()}
-                        <textarea
-                            rows={this.getTextAreaRowCount()}
-                            value={this.state.code}
-                            onChange={(event) => this.setState({ code: event.target.value })}>
-                        </textarea>
+                <div>
+                    <div className={style.row}>
+                        <div className={`${style.cell} ${style.numbering}`}>
+                            {this.getRowNumbers()}
+                        </div>
+                        <div className={style.cellExpanded}>
+                            {this.getDefaultCodeLines()}
+                            <textarea
+                                rows={this.getTextAreaRowCount()}
+                                value={this.state.code}
+                                onChange={(event) => this.setState({ code: event.target.value })}>
+                            </textarea>
+                        </div>
                     </div>
                 </div>
 

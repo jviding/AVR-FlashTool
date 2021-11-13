@@ -1,16 +1,11 @@
 .container {
     display: inline-block;
     width: 80%;
-    height: 100%;
-    min-height: 100%;
     background: white;
     text-align: left;
-    /*padding-top: 30px;*/
-    padding-left: 30px;
-    padding-right: 30px;
+    padding: 30px;
 
     .row {
-        position: relative;
         display: table-row;
         width: 100%;
     }
@@ -19,16 +14,17 @@
         width: 1px;
     }
     .cellExpanded {
-        @extend .cell;
+        display: table-cell;
         width: 100%;
     }
 
-    h3 {
+    .nowrap {
         white-space: nowrap;
     }
 
     select {
         margin-left: 15px;
+        margin-right: 25px;
         font-size: 110%;
         cursor: pointer;
     }
@@ -44,12 +40,17 @@
         display: inline-block;
         width: 100%;
         padding: 2px 0;
+        padding-left: 5px;
     }
 
     .numbering {
         text-align: right;
         vertical-align: top;
         padding-right: 5px;
+
+        .line {
+            padding-left: 0;
+        }
 
         .lineExtraPaddingTop {
             @extend .line;
@@ -58,8 +59,10 @@
     }
 
     textarea {
-        @extend .line;
+        display: inline-block;
+        width: 100%;
         cursor: text;
+        white-space: pre;
         overflow: auto;
         resize: none;
         font-family: Ubuntu, sans-serif;
