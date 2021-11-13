@@ -70,8 +70,8 @@ export default class Editor extends React.Component <Props, IState> {
                             <h3 className={style.nowrap}>Target MCU:</h3>
                         </div>
                         <div className={style.cell}>
-                            <select>
-                                <option value="at85def.asm" selected>ATtiny85</option>
+                            <select defaultValue={"at85def.asm"}>
+                                <option value="at85def.asm">ATtiny85</option>
                                 <option value="asd2">asd1234</option>
                                 <option value="asd2">asd12345</option>
                             </select>
