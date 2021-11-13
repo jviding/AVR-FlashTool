@@ -13,7 +13,7 @@ interface IState {
 class Main extends React.Component <unknown, IState> {
     
     state: IState = {
-        view: 'Editor'
+        view: 'Projects'
     }
 
     setView(newView: string) {
