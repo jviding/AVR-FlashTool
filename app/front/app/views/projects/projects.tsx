@@ -66,7 +66,7 @@ export default class Projects extends React.Component <Props, IState> {
     render(): JSX.Element {
         return (
             <div className={style.container}>
-                {this.state.error && <div className={style.err}>{this.state.errorMessage}</div> }
+                {this.state.error && <div className={'err'}>{this.state.errorMessage}</div> }
 
                 <h1>Projects</h1>
                 <div>Current project: XXX</div>

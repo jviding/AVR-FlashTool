@@ -1,6 +1,6 @@
 import React from 'react'
 import style from './editor.module.scss'
-
+import API from '../../api/api'
 import Console from '../console/console'
 
 interface Props {
@@ -10,7 +10,9 @@ interface Props {
 interface IState {
     mcuName: string,
     mcuLib: string,
-    code: string
+    code: string,
+    error: boolean,
+    errorMessage: string
 }
 
 export default class Editor extends React.Component <Props, IState> {
@@ -22,8 +24,18 @@ export default class Editor extends React.Component <Props, IState> {
     state: IState = {
         mcuName: 'ATtiny85',
         mcuLib: 'tn85def.inc',
-        code: 'main:\n; *** Write your code here ***'
+        code: '',
+        error: false,
+        errorMessage: ''
     }
+
+    componentDidMount() {
+        API.getFileContents(this.props.filename)
+        .then((contents) => this.setState({ code: contents }))
+        .catch((res) => this.setState({ error: true, errorMessage: res }))
+    }
+
+    // TODO: componentWillUnmount -> Cache code to main.tsx
 
     getDefaultCodeLines() {
         return [
@@ -60,6 +72,7 @@ export default class Editor extends React.Component <Props, IState> {
     render(): JSX.Element {
         return (
             <div className={style.container}>
+                {this.state.error && <div className={'err'}>{this.state.errorMessage}</div> }
                 <div>
                     <div className={style.row}>
                         <div className={style.cell}>
@@ -84,6 +97,7 @@ export default class Editor extends React.Component <Props, IState> {
                         </div>
                     </div>
                 </div>
+                <h3>{this.props.filename}</h3>
                 <div>
                     <div className={style.row}>
                         <div className={`${style.cell} ${style.numbering}`}>
