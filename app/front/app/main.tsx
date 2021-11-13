@@ -7,18 +7,24 @@ import Projects from './views/projects/projects'
 import Editor from './views/editor/editor'
 
 interface IState {
-    view: string
+    view: string,
+    filename: string
 }
 
 class Main extends React.Component <unknown, IState> {
     
     state: IState = {
-        view: 'Projects'
+        view: 'Projects',
+        filename: ''
     }
 
     setView(newView: string) {
         this.setState({ view: newView })
         console.log(newView)
+    }
+
+    setFilename(newFilename: string) {
+        this.setState({ filename: newFilename, view: 'Editor' })
     }
 
     render() {
@@ -31,8 +37,14 @@ class Main extends React.Component <unknown, IState> {
                 </div>
                 <div className={style.view}>
                     <div className={style.container}>
-                        {this.state.view === 'Projects' && <Projects some={'asd'} />}
-                        {this.state.view === 'Editor' && <Editor filename={'asd'} />}
+                        {this.state.view === 'Projects' && 
+                            <Projects 
+                                setFilename={this.setFilename.bind(this)} />
+                        }
+                        {this.state.view === 'Editor' && 
+                            <Editor 
+                                filename={this.state.filename} />
+                        }
                     </div>
                 </div>
             </div>

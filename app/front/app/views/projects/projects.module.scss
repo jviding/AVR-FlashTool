@@ -1,6 +1,30 @@
 .container {
     display: inline-block;
-    width: 80%;
-    height: 80%;
+    padding: 30px 60px;
     background: white;
+
+    .row {
+        display: table-row;
+        min-width: 400px;
+    }
+    .cell {
+        display: table-cell;
+        width: 1px;
+    }
+    .cellExtended {
+        display: table-cell;
+        width: 100%;
+    }
+
+    .nowrap {
+        white-space: nowrap;
+    }
+
+    input {
+        width: 100%;
+    }
+
+    .err {
+        color: red;
+    }
 }
