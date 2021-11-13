@@ -1,10 +1,16 @@
 const API = {
 
-    createFile: (filename: string) => {
-        return Promise.resolve(filename + '.asm')
+    getMCUs: () => {
+        return Promise.resolve(true)
     },
 
-    deleteFile: () => { // filename: string
+    createFile: (filename: string, extension: string) => {
+        console.log('Create: ' + filename + '.' + extension)
+        return Promise.resolve(filename + '.' + extension)
+    },
+
+    deleteFile: (filename: string) => {
+        console.log('Delete: ' + filename)
         return Promise.resolve(true)
     },
 
