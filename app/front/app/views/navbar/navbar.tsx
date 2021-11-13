@@ -3,7 +3,8 @@ import style from './navbar.module.scss'
 
 interface Props {
     viewActive: string,
-    setView(newView: string): void
+    setView(newView: string): void,
+    allowEditor: boolean
 }
 
 interface IState {
@@ -17,7 +18,13 @@ export default class NavBar extends React.Component <Props, IState> {
     }
 
     state: IState = {
-        views: ['Projects', 'Editor']
+        views: ['Projects']
+    }
+
+    componentDidUpdate(prevProps: Props) {
+        if (prevProps.allowEditor === false && this.props.allowEditor) {
+            this.setState({ views: this.state.views.concat(['Editor']) })
+        }
     }
 
     getNavBarOptions() {

@@ -20,7 +20,6 @@ class Main extends React.Component <unknown, IState> {
 
     setView(newView: string) {
         this.setState({ view: newView })
-        console.log(newView)
     }
 
     setFilename(newFilename: string) {
@@ -33,7 +32,8 @@ class Main extends React.Component <unknown, IState> {
                 <div className={style.nav}>
                     <NavBar 
                         viewActive={this.state.view} 
-                        setView={this.setView.bind(this)} />
+                        setView={this.setView.bind(this)}
+                        allowEditor={this.state.filename.length > 0} />
                 </div>
                 <div className={style.view}>
                     <div className={style.container}>
