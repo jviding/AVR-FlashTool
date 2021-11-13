@@ -30,16 +30,22 @@ export default class Editor extends React.Component <Props, IState> {
     }
 
     componentDidMount() {
-        API.getFileContents(this.props.filename)
-        .then((contents) => this.setState({ code: contents }))
-        .catch((res) => this.setState({ error: true, errorMessage: res }))
+        if (sessionStorage[this.props.filename]) {
+            this.setState({ code: sessionStorage[this.props.filename] })
+        } else {
+            API.getFileContents(this.props.filename)
+            .then((contents) => this.setState({ code: contents }))
+            .catch((res) => this.setState({ error: true, errorMessage: res }))
+        }
     }
 
-    // TODO: componentWillUnmount -> Cache code to main.tsx
+    componentWillUnmount() {
+        sessionStorage[this.props.filename] = this.state.code
+    }
 
     getDefaultCodeLines() {
         return [
-            `; *** This program is written for ${this.state.mcuName} ***`,
+            `; *** Target MCU: ${this.state.mcuName} ***`,
             '.nolist',
             `.include "${this.state.mcuLib}"`,
             '.list',
