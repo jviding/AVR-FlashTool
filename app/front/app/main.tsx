@@ -38,7 +38,8 @@ class Main extends React.Component <unknown, IState> {
                 <div className={style.view}>
                     <div className={style.container}>
                         {this.state.view === 'Projects' && 
-                            <Projects 
+                            <Projects
+                                filename={this.state.filename}
                                 setFilename={this.setFilename.bind(this)} />
                         }
                         {this.state.view === 'Editor' && 

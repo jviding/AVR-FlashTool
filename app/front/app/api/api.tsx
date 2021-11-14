@@ -19,7 +19,7 @@ const API = {
     },
 
     getFilenames: () => {
-        return Promise.resolve(['file_one.asm', 'file_two.asm', 'file_three.asm'])
+        return Promise.resolve(['file_one.asm', 'file_two.asm', 'file_three.asm', 'x.asm', 'x.asm', 'x.asm', 'x.asm', 'x.asm', 'x.asm', 'x.asm', 'x.asm', 'x.asm'])
     },
 
     getFile: (filename: string) => {
@@ -44,12 +44,12 @@ const API = {
 
     buildFile: (filename: string, contents: string) => {
         console.log('Build ' + filename + ':\n' + contents)
-        return Promise.resolve('BuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuilt')
+        return Promise.resolve('Built')
     },
 
     flashFile: (filename: string, contents: string) => {
         console.log('Flash ' + filename + ':\n' + contents)
-        return Promise.resolve('FlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashed')
+        return Promise.resolve('Flashed')
     }
 }
 

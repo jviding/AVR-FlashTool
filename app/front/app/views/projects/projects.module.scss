@@ -1,26 +1,36 @@
 .container {
     display: inline-block;
-    padding: 30px 60px;
+    padding: 30px 150px;
     background: white;
 
-    .row {
-        display: table-row;
-        min-width: 400px;
-    }
-    .cell {
-        display: table-cell;
-        width: 1px;
-    }
-    .cellExtended {
-        display: table-cell;
-        width: 100%;
-    }
+    .tables {
 
-    .nowrap {
-        white-space: nowrap;
-    }
+        table {
+            width: 100%;
+            padding-top: 10px;
+            text-align: left;
+            
+            .rightAlignText {
+                text-align: right;
+            }
+        }
 
-    input {
-        width: 100%;
-    }
+        .secondTable {
+            td {
+                width: 1%;
+                padding-top: 5px;
+            }
+            td:nth-child(2) {
+                width: 100%;
+            }
+        }
+
+        input {
+            font-family: Ubuntu, sans-serif;
+        }
+
+        button {
+            cursor: pointer;
+        }
+    }   
 }

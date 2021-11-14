@@ -4,12 +4,15 @@ import API from '../../api/api'
 import { isValidFilename } from './fileValidator'
 
 interface Props {
+    filename: string,
     setFilename(filename: string): void
 }
 
 interface IState {
     filenames: string[],
     newFilename: string,
+    isDeleting: boolean,
+    delFile: string,
     error: boolean,
     errorMessage: string
 }
@@ -23,6 +26,8 @@ export default class Projects extends React.Component <Props, IState> {
     state: IState = {
         filenames: [],
         newFilename: '',
+        isDeleting: false,
+        delFile: '',
         error: false,
         errorMessage: ''
     }
@@ -35,7 +40,7 @@ export default class Projects extends React.Component <Props, IState> {
 
     createFile() {
         this.setState({ error: false })
-        isValidFilename(this.state.newFilename)
+        isValidFilename(this.state.newFilename, this.state.filenames)
         .then((newFilename) => {
             API.createFile(newFilename, 'asm')
             .then((filename) => this.props.setFilename(filename))
@@ -61,25 +66,41 @@ export default class Projects extends React.Component <Props, IState> {
 
     getFilenames() {
         return this.state.filenames.map((filename, index) => {
+            const IS_BEING_DELETED = this.state.isDeleting && this.state.delFile === filename
             return (
-                <div key={index} className={style.row}>
-                    <div className={style.cell}>
-                        {filename}
-                    </div>
-                    <div className={style.cellExtended}></div>
-                    <div className={style.cell}>
-                        <button
-                            onClick={() => this.openFile(filename)}>
-                            Open
-                        </button>
-                    </div>
-                    <div className={style.cell}>
-                        <button
-                            onClick={() => this.deleteFile(filename)}>
-                            Delete
-                        </button>
-                    </div>
-                </div>
+                <tr key={index}>
+                    <td className={style.rightAlignText}>{index + 1}.</td>
+                    {!IS_BEING_DELETED && <td>{filename}</td>}
+                    {IS_BEING_DELETED && <td>Are you sure?</td>}
+                    <td>
+                        {!IS_BEING_DELETED &&
+                            <button
+                                onClick={() => this.openFile(filename)}>
+                                Open
+                            </button>
+                        }
+                        {IS_BEING_DELETED &&
+                            <button
+                                onClick={() => this.deleteFile(filename)}>
+                                Yes
+                            </button>
+                        }
+                    </td>
+                    <td>
+                        {!IS_BEING_DELETED &&
+                            <button
+                                onClick={() => this.setState({ isDeleting: true, delFile: filename })}>
+                                Delete
+                            </button>
+                        }
+                        {IS_BEING_DELETED &&
+                            <button
+                                onClick={() => this.setState({ isDeleting: false, delFile: '' })}>
+                                No
+                            </button>
+                        }
+                    </td>
+                </tr>
             )
         })
     }
@@ -90,36 +111,45 @@ export default class Projects extends React.Component <Props, IState> {
                 {this.state.error && <div className={'err'}>{this.state.errorMessage}</div> }
 
                 <h1>Projects</h1>
-                <div>Current project: XXX</div>
+                <div>Current: <b>{this.props.filename || 'Not selected'}</b></div>
 
-                <div className={style.row}>
-                    <div className={style.cell}>
-                        <h3 className={style.nowrap}>Open project</h3>
-                    </div>
-                    <div className={style.cellExtended}></div>
-                    <div className={style.cell}></div>
+                <div className={style.tables}>
+                    <table className={style.firstTable}>
+                        <thead>
+                            <tr>
+                                <th colSpan={3}>New Project</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input
+                                        type={'text'}
+                                        placeholder={'Enter filename...'}
+                                        value={this.state.newFilename}
+                                        onChange={(event) => this.setState({ newFilename: event.target.value })} />
+                                </td>
+                                <td>.asm</td>
+                                <td>
+                                    <button
+                                        onClick={() => this.createFile()}>
+                                        Create
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table className={style.secondTable}>
+                        <thead>
+                            <tr>
+                                <th colSpan={4}>Open project</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.getFilenames()}
+                        </tbody>
+                    </table>
                 </div>
-                
-                <div className={style.row}>
-                    <div className={style.cell}>
-                        <input
-                            type={'text'}
-                            placeholder={'New project'}
-                            value={this.state.newFilename}
-                            onChange={(event) => this.setState({ newFilename: event.target.value })} />
-                            .asm
-                    </div>
-                    <div className={style.cellExtended}></div>
-                    <div className={style.cell}>
-                        <button
-                            onClick={() => this.createFile()}>
-                            Create
-                        </button>
-                    </div>
-                </div>
-
-                {this.getFilenames()}
-                
             </div>
         )
     }
