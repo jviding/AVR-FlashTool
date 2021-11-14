@@ -30,17 +30,17 @@
     (getFilenames))
   (GET "/file/:filename" request
     (let [filename (get (get request :route-params) :filename)]
-      (getFile)))
+      (getFile filename)))
   (POST "/file/:filename" request
     (let [filename (get (get request :route-params) :filename)]
-      (createFile)))
+      (createFile filename)))
   (DELETE "/file/:filename" request
     (let [filename (get (get request :route-params) :filename)]
-      (deleteFile)))
+      (deleteFile filename)))
   (PUT "/file/save/:filename" request
     (let [filename (get (get request :route-params) :filename)
           file (get (get request :multipart-params) "file")]
-      (saveFile)))
+      (saveFile filename file)))
   (PUT "/file/build/:filename" request
     (let [filename (get (get request :route-params) :filename)
           file (get (get request :multipart-params) "file")]

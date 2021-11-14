@@ -5,5 +5,8 @@
 
 
 (defn getMCULibs []
-    (response {}))
+    (response {:mcuLibs [
+      {:mcu "some1", :lib "lib1.inc"},
+      {:mcu "some2", :lib "lib2.inc"},
+      {:mcu "some3", :lib "lib3.inc"}]}))
 

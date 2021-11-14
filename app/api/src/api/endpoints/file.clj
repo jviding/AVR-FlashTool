@@ -5,22 +5,22 @@
 
 
 (defn getFilenames []
-    (response {}))
+    (response {:filenames ["some1", "some2", "some3"]}))
 
-(defn getFile []
-    (response {}))
+(defn getFile [filename]
+    (response {:filename filename}))
 
-(defn createFile []
-    (response {}))
+(defn createFile [filename]
+    (response {:filename filename}))
 
-(defn deleteFile []
-    (response {}))
+(defn deleteFile [filename]
+    (response {:filename filename}))
 
-(defn saveFile []
-    (response {}))
+(defn saveFile [filename, file]
+    (response {:filename filename, :file file}))
 
-(defn buildFile []
-    (response {}))
+(defn buildFile [filename, file]
+    (response {:filename filename, :file file}))
 
-(defn flashFile []
-    (response {}))
+(defn flashFile [filename, file]
+    (response {:filename filename, :file file}))
