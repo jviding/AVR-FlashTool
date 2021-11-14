@@ -44,17 +44,18 @@ export default class Editor extends React.Component <Props, IState> {
         logs: []
     }
 
+    getTimeNow() {
+        const padWithZeros = (val: number) => { return val < 10 ? '0' + val : '' + val }
+        const SECONDS = padWithZeros((new Date()).getSeconds())
+        const MINUTES = padWithZeros((new Date()).getMinutes())
+        const HOURS = padWithZeros((new Date()).getHours())
+        return `${HOURS}:${MINUTES}:${SECONDS}`
+    }
+
     callFileAPI(fileCall: (filename: string, code: string) => Promise<string>) {
         this.setState({ error: false })
         fileCall(this.props.filename, this.state.readOnlyCode + this.state.editableCode)
-        .then((logEvent) => {
-            const padWithZeros = (val: number) => { return val < 10 ? '0' + val : '' + val }
-            const SECONDS = padWithZeros((new Date()).getSeconds())
-            const MINUTES = padWithZeros((new Date()).getMinutes())
-            const HOURS = padWithZeros((new Date()).getHours())
-            const TIME = `${HOURS}:${MINUTES}:${SECONDS}`
-            this.setState({ logs: this.state.logs.concat([{ time: TIME, event: logEvent }]) })
-        })
+        .then((logEvent) => { this.setState({ logs: this.state.logs.concat([{ time: this.getTimeNow(), event: logEvent }]) }) })
         .catch((res) => this.setState({ error: true, errorMessage: res }))
     }
 
@@ -87,7 +88,8 @@ export default class Editor extends React.Component <Props, IState> {
             const MCU_LIB = Code.getTargetOrDefaultMCULib(mcuLibs, code)
             const RO_CODE = Code.getDefaultReadOnlyCode(MCU_LIB)
             const E_CODE = Code.getActualOrDefaultEditableCode(code)
-            this.setState({ mcuLibs: mcuLibs, mcu: MCU_LIB.mcu, readOnlyCode: RO_CODE, editableCode: E_CODE, logs: this.getLogs() })
+            const LOGS = this.getLogs().concat([{ time: this.getTimeNow(), event: `Started on ${this.props.filename}` }])
+            this.setState({ mcuLibs: mcuLibs, mcu: MCU_LIB.mcu, readOnlyCode: RO_CODE, editableCode: E_CODE, logs: LOGS })
         })
         .catch((res) => this.setState({ error: true, errorMessage: res }))
     }
@@ -104,7 +106,8 @@ export default class Editor extends React.Component <Props, IState> {
 
     handleSelectionChange(newMCULib: MCULib) {
         const RO_CODE = Code.getDefaultReadOnlyCode(newMCULib)
-        this.setState({ readOnlyCode: RO_CODE, mcu: newMCULib.mcu })
+        const LOGS = this.state.logs.concat([{ time: this.getTimeNow(), event: `MCU was changed to ${newMCULib.mcu} (${newMCULib.lib})` }])
+        this.setState({ readOnlyCode: RO_CODE, mcu: newMCULib.mcu, logs: LOGS })
     }
 
     getReadOnlyCodeLines() {
