@@ -13,13 +13,19 @@ interface MCULib {
     lib: string
 }
 
+interface LogEvent {
+    time: string,
+    event: string
+}
+
 interface IState {
     mcuLibs: MCULib[],
     mcu: string,
     readOnlyCode: string,
     editableCode: string,
     error: boolean,
-    errorMessage: string
+    errorMessage: string,
+    logs: LogEvent[]
 }
 
 export default class Editor extends React.Component <Props, IState> {
@@ -34,14 +40,23 @@ export default class Editor extends React.Component <Props, IState> {
         readOnlyCode: '',
         editableCode: '',
         error: false,
-        errorMessage: ''
+        errorMessage: '',
+        logs: []
     }
 
-    // BUILD
-
-    // FLASH
-
-    // SAVE
+    callFileAPI(fileCall: (filename: string, code: string) => Promise<string>) {
+        this.setState({ error: false })
+        fileCall(this.props.filename, this.state.readOnlyCode + this.state.editableCode)
+        .then((logEvent) => {
+            const padWithZeros = (val: number) => { return val < 10 ? '0' + val : '' + val }
+            const SECONDS = padWithZeros((new Date()).getSeconds())
+            const MINUTES = padWithZeros((new Date()).getMinutes())
+            const HOURS = padWithZeros((new Date()).getHours())
+            const TIME = `${HOURS}:${MINUTES}:${SECONDS}`
+            this.setState({ logs: this.state.logs.concat([{ time: TIME, event: logEvent }]) })
+        })
+        .catch((res) => this.setState({ error: true, errorMessage: res }))
+    }
 
     getMCULibs() {
         if (!!sessionStorage.mcuLibs) {
@@ -55,8 +70,12 @@ export default class Editor extends React.Component <Props, IState> {
         if (!!sessionStorage[filename]) {
             return Promise.resolve(sessionStorage[filename])
         } else {
-            return API.getFileContents(filename)
+            return API.getFile(filename)
         }
+    }
+
+    getLogs() {
+        return !!sessionStorage.logs ? JSON.parse(sessionStorage.logs) : []
     }
 
     setProject() {
@@ -68,7 +87,7 @@ export default class Editor extends React.Component <Props, IState> {
             const MCU_LIB = Code.getTargetOrDefaultMCULib(mcuLibs, code)
             const RO_CODE = Code.getDefaultReadOnlyCode(MCU_LIB)
             const E_CODE = Code.getActualOrDefaultEditableCode(code)
-            this.setState({ mcuLibs: mcuLibs, mcu: MCU_LIB.mcu, readOnlyCode: RO_CODE, editableCode: E_CODE })
+            this.setState({ mcuLibs: mcuLibs, mcu: MCU_LIB.mcu, readOnlyCode: RO_CODE, editableCode: E_CODE, logs: this.getLogs() })
         })
         .catch((res) => this.setState({ error: true, errorMessage: res }))
     }
@@ -80,6 +99,7 @@ export default class Editor extends React.Component <Props, IState> {
     componentWillUnmount() {
         sessionStorage[this.props.filename] = this.state.readOnlyCode + this.state.editableCode
         sessionStorage.mcuLibs = JSON.stringify(this.state.mcuLibs)
+        sessionStorage.logs = JSON.stringify(this.state.logs)
     }
 
     handleSelectionChange(newMCULib: MCULib) {
@@ -140,13 +160,22 @@ export default class Editor extends React.Component <Props, IState> {
                             </select>
                         </div>
                         <div className={style.cell}>
-                            <button>Build</button>
+                            <button
+                                onClick={() => this.callFileAPI(API.buildFile)} >
+                                Build
+                            </button>
                         </div>
                         <div className={style.cell}>
-                            <button>Flash</button>
+                            <button
+                                onClick={() => this.callFileAPI(API.flashFile)} >
+                                Flash
+                            </button>
                         </div>
                         <div className={style.cell}>
-                            <button>Save</button>
+                            <button
+                                onClick={() => this.callFileAPI(API.saveFile)} >
+                                Save
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -166,7 +195,7 @@ export default class Editor extends React.Component <Props, IState> {
                         </div>
                     </div>
                 </div>
-                <Console some={'asd'} />
+                <Console logs={this.state.logs} />
             </div>
         )
     }

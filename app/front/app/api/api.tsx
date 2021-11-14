@@ -18,6 +18,15 @@ const API = {
         return Promise.resolve(MCU_LIBS)
     },
 
+    getFilenames: () => {
+        return Promise.resolve(['file_one.asm', 'file_two.asm', 'file_three.asm'])
+    },
+
+    getFile: (filename: string) => {
+        console.log(filename)
+        return Promise.resolve('')
+    },
+
     createFile: (filename: string, extension: string) => {
         console.log('Create: ' + filename + '.' + extension)
         return Promise.resolve(filename + '.' + extension)
@@ -28,25 +37,19 @@ const API = {
         return Promise.resolve(true)
     },
 
-    getFilenames: () => {
-        return Promise.resolve(['file_one.asm', 'file_two.asm', 'file_three.asm'])
+    saveFile: (filename: string, contents: string) => {
+        console.log('Save ' + filename + ':\n' + contents)
+        return Promise.resolve('Saved')
     },
 
-    getFileContents: (filename: string) => {
-        console.log(filename)
-        return Promise.resolve('')
+    buildFile: (filename: string, contents: string) => {
+        console.log('Build ' + filename + ':\n' + contents)
+        return Promise.resolve('BuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuiltBuilt')
     },
 
-    saveFileContents: () => { // filename: string, contents: string
-        return Promise.resolve(true)
-    },
-
-    buildFile: () => { // filename: string
-        return Promise.resolve(true)
-    },
-
-    flashFile: () => { // filename: string
-        return Promise.resolve(true)
+    flashFile: (filename: string, contents: string) => {
+        console.log('Flash ' + filename + ':\n' + contents)
+        return Promise.resolve('FlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashedFlashed')
     }
 }
 
