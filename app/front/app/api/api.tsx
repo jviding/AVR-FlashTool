@@ -1,7 +1,21 @@
 const API = {
 
-    getMCUs: () => {
-        return Promise.resolve(true)
+    getMCULibs: () => {
+        const MCU_LIBS = [
+            {
+                mcu: 'ATtiny85',
+                lib: 'at85def.asm'
+            },
+            {
+                mcu: 'ATtiny45',
+                lib: 'at45def.asm'
+            },
+            {
+                mcu: 'SomeX',
+                lib: 'atXXdef.asm'
+            }
+        ]
+        return Promise.resolve(MCU_LIBS)
     },
 
     createFile: (filename: string, extension: string) => {
@@ -19,26 +33,11 @@ const API = {
     },
 
     getFileContents: (filename: string) => {
-        // If file is still empty
-        /*const res = {
-            mcuLib: '',
-            defaultCode: `; *** This program is written for ${this.state.mcuName} ***
-            .nolist
-            .include "${this.state.mcuLib}"
-            .list
-            `,
-            code: 'main:\n; *** Write your code here ***'
-        }
-        console.log(res)*/
         console.log(filename)
-        // TODO: Read ;12345 or something from default code and split
-        // Return then object { code: x, defaultCode: y }
-        return Promise.resolve('main:\n; *** Write your code here ***')
+        return Promise.resolve('')
     },
 
     saveFileContents: () => { // filename: string, contents: string
-        // TODO: Write ;12345 or something after default code -> or before?
-        // Also write MCU details there so can read from getFileContents
         return Promise.resolve(true)
     },
 

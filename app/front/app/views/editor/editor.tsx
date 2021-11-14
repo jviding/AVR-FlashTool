@@ -2,15 +2,22 @@ import React from 'react'
 import style from './editor.module.scss'
 import API from '../../api/api'
 import Console from '../console/console'
+import Code from './codeHandler'
 
 interface Props {
     filename: string
 }
 
+interface MCULib {
+    mcu: string,
+    lib: string
+}
+
 interface IState {
-    mcuName: string,
-    mcuLib: string,
-    code: string,
+    mcuLibs: MCULib[],
+    mcu: string,
+    readOnlyCode: string,
+    editableCode: string,
     error: boolean,
     errorMessage: string
 }
@@ -22,57 +29,94 @@ export default class Editor extends React.Component <Props, IState> {
     }
 
     state: IState = {
-        mcuName: 'ATtiny85',
-        mcuLib: 'tn85def.inc',
-        code: '',
+        mcuLibs: [],
+        mcu: '',
+        readOnlyCode: '',
+        editableCode: '',
         error: false,
         errorMessage: ''
     }
 
-    componentDidMount() {
-        if (sessionStorage[this.props.filename]) {
-            this.setState({ code: sessionStorage[this.props.filename] })
+    // BUILD
+
+    // FLASH
+
+    // SAVE
+
+    getMCULibs() {
+        if (!!sessionStorage.mcuLibs) {
+            return Promise.resolve(JSON.parse(sessionStorage.mcuLibs))
         } else {
-            API.getFileContents(this.props.filename)
-            .then((contents) => this.setState({ code: contents }))
-            .catch((res) => this.setState({ error: true, errorMessage: res }))
+            return API.getMCULibs()   
         }
     }
 
-    componentWillUnmount() {
-        sessionStorage[this.props.filename] = this.state.code
+    getCode(filename: string) {
+        if (!!sessionStorage[filename]) {
+            return Promise.resolve(sessionStorage[filename])
+        } else {
+            return API.getFileContents(filename)
+        }
     }
 
-    getDefaultCodeLines() {
-        return [
-            `; *** Target MCU: ${this.state.mcuName} ***`,
-            '.nolist',
-            `.include "${this.state.mcuLib}"`,
-            '.list',
-            ''
-        ].map((text, index) => {
-            return (
-                <div key={index} className={style.line}>{text}</div>
-            )
+    setProject() {
+        Promise.all([
+            this.getMCULibs(),
+            this.getCode(this.props.filename)
+        ])
+        .then(([mcuLibs, code]) => {
+            const MCU_LIB = Code.getTargetOrDefaultMCULib(mcuLibs, code)
+            const RO_CODE = Code.getDefaultReadOnlyCode(MCU_LIB)
+            const E_CODE = Code.getActualOrDefaultEditableCode(code)
+            this.setState({ mcuLibs: mcuLibs, mcu: MCU_LIB.mcu, readOnlyCode: RO_CODE, editableCode: E_CODE })
+        })
+        .catch((res) => this.setState({ error: true, errorMessage: res }))
+    }
+
+    componentDidMount() {
+        this.setProject()
+    }
+
+    componentWillUnmount() {
+        sessionStorage[this.props.filename] = this.state.readOnlyCode + this.state.editableCode
+        sessionStorage.mcuLibs = JSON.stringify(this.state.mcuLibs)
+    }
+
+    handleSelectionChange(newMCULib: MCULib) {
+        const RO_CODE = Code.getDefaultReadOnlyCode(newMCULib)
+        this.setState({ readOnlyCode: RO_CODE, mcu: newMCULib.mcu })
+    }
+
+    getReadOnlyCodeLines() {
+        // The string ends in "\n" so slice(0, -1) is necessary
+        // F.ex. "a\nb\n".split("\n") returns ["a", "b", ""]
+        return this.state.readOnlyCode.split('\n').slice(0, -1).map((line, index) => {
+            return <div key={index} className={style.line}>{line}</div>
         })
     }
 
     getRowNumbers() {
-        const rowCount = this.getDefaultCodeLines().length + this.getTextAreaRowCount()
-        return Array.from(Array(rowCount), (_, index) => {
+        const ROW_COUNT = this.getReadOnlyCodeLines().length + this.getTextAreaRowCount()
+        return Array.from(Array(ROW_COUNT), (_, index) => {
             let className = style.line
-            if (index === this.getDefaultCodeLines().length) {
+            if (index === this.getReadOnlyCodeLines().length) {
                 className = style.lineExtraPaddingTop
             }
             return (
-                <div key={index} className={className}>{index+1}</div>
+                <div key={index} className={className}>{index + 1}</div>
             )
         })
     }
 
     getTextAreaRowCount() {
-        const count = this.state.code.split('\n').length
-        return count > 10 ? count : 10
+        const ROW_COUNT = this.state.editableCode.split('\n').length
+        return ROW_COUNT > 10 ? ROW_COUNT : 10
+    }
+
+    getMCUSelectOptions() {
+        return this.state.mcuLibs.map((mcuLib, index) => {
+            return <option key={index} value={mcuLib.lib}>{mcuLib.mcu}</option>
+        })
     }
 
     render(): JSX.Element {
@@ -89,10 +133,10 @@ export default class Editor extends React.Component <Props, IState> {
                             <h3 className={style.nowrap}>Target MCU:</h3>
                         </div>
                         <div className={style.cell}>
-                            <select defaultValue={"at85def.asm"}>
-                                <option value="at85def.asm">ATtiny85</option>
-                                <option value="asd2">asd1234</option>
-                                <option value="asd2">asd12345</option>
+                            <select 
+                                defaultValue={this.state.mcu}
+                                onChange={(event) => this.handleSelectionChange(this.state.mcuLibs[event.target.options.selectedIndex])} >
+                                {this.getMCUSelectOptions()}
                             </select>
                         </div>
                         <div className={style.cell}>
@@ -100,6 +144,9 @@ export default class Editor extends React.Component <Props, IState> {
                         </div>
                         <div className={style.cell}>
                             <button>Flash</button>
+                        </div>
+                        <div className={style.cell}>
+                            <button>Save</button>
                         </div>
                     </div>
                 </div>
@@ -110,11 +157,11 @@ export default class Editor extends React.Component <Props, IState> {
                             {this.getRowNumbers()}
                         </div>
                         <div className={style.cellExpanded}>
-                            {this.getDefaultCodeLines()}
+                            {this.getReadOnlyCodeLines()}
                             <textarea
                                 rows={this.getTextAreaRowCount()}
-                                value={this.state.code}
-                                onChange={(event) => this.setState({ code: event.target.value })}>
+                                value={this.state.editableCode}
+                                onChange={(event) => this.setState({ editableCode: event.target.value })}>
                             </textarea>
                         </div>
                     </div>
