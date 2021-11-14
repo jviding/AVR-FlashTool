@@ -1,4 +1,4 @@
-(ns files.middleware.logger)
+(ns api.middleware.logger)
 
 (defn- getTimestamp []
   (str "[" (.format (java.text.SimpleDateFormat. "dd/LLL/yyyy") (new java.util.Date)) "]"))

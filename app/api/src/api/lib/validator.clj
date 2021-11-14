@@ -1,4 +1,4 @@
-(ns files.lib.validator)
+(ns api.lib.validator)
 
 ;; TODO: 
 ;; Query games API to see if exists?

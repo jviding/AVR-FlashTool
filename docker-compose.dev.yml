@@ -24,4 +24,4 @@ services:
     ports:
       - "9090:9090"
     working_dir: /app
-    command: lein run
+    command: sleep 3600000 # lein run
