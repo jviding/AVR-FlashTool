@@ -2,17 +2,17 @@ version: '3.8'
 
 services:
 
-  front:
-    build:
-      context: ./app/front
-      dockerfile: dev.Dockerfile
-    restart: always
-    volumes:
-      - ./app/front:/app
-    ports:
-      - "8080:8080"
-    working_dir: /app
-    command: npm start
+#  front:
+#    build:
+#      context: ./app/front
+#      dockerfile: dev.Dockerfile
+#    restart: always
+#    volumes:
+#      - ./app/front:/app
+#    ports:
+#      - "8080:8080"
+#    working_dir: /app
+#    command: npm start
 
   api:
     build:
@@ -21,6 +21,7 @@ services:
     restart: always
     volumes:
       - ./app/api:/app
+      - ./uploads:/uploads
     ports:
       - "9090:9090"
     working_dir: /app

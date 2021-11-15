@@ -10,6 +10,7 @@
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.json :refer [wrap-json-body, wrap-json-response]]
             [ring.middleware.multipart-params :refer [wrap-multipart-params]]
+            [ring.util.response :refer [bad-request]]
             [api.endpoints.file :refer [
               getFilenames, 
               getFile, 
@@ -19,37 +20,63 @@
               buildFile,
               flashFile]]
             [api.endpoints.mcuLibs :refer [getMCULibs]]
-            [api.middleware.logger :refer [logger]]))
+            [api.middleware.logger :refer [logger]]
+            [api.lib.validator :refer [isValidFilename, isValidFileData]]))
 
 ;; TODO (if and when using JSON)
 ;; Schema + validation
 (defroutes api
+  
   (GET "/mcuLibs" request
     (getMCULibs))
+  
   (GET "/filenames" request 
     (getFilenames))
+  
   (GET "/file/:filename" request
     (let [filename (get (get request :route-params) :filename)]
-      (getFile filename)))
+      (cond
+        (not (isValidFilename filename)) (bad-request "Bad filename")
+        :else (getFile filename))))
+  
   (POST "/file/:filename" request
     (let [filename (get (get request :route-params) :filename)]
-      (createFile filename)))
+      (cond
+        (not (isValidFilename filename)) (bad-request "Bad filename")
+        :else (createFile filename))))
+
   (DELETE "/file/:filename" request
     (let [filename (get (get request :route-params) :filename)]
-      (deleteFile filename)))
+      (cond
+        (not (isValidFilename filename)) (bad-request "Bad filename")
+        :else (deleteFile filename))))
+  
   (PUT "/file/save/:filename" request
     (let [filename (get (get request :route-params) :filename)
-          file (get (get request :multipart-params) "file")]
-      (saveFile filename file)))
+          data (get-in request [:body "data"])]
+      (cond
+        (not (isValidFilename filename)) (bad-request "Bad filename")
+        (not (isValidFileData data)) (bad-request "Bad file data")
+        :else (saveFile filename data))))
+  
   (PUT "/file/build/:filename" request
     (let [filename (get (get request :route-params) :filename)
-          file (get (get request :multipart-params) "file")]
-      (buildFile)))
+          data (get-in request [:body "data"])]
+      (cond
+        (not (isValidFilename filename)) (bad-request "Bad filename")
+        (not (isValidFileData data)) (bad-request "Bad file data")
+        :else (buildFile filename data))))
+  
   (PUT "/file/flash/:filename" request
     (let [filename (get (get request :route-params) :filename)
-          file (get (get request :multipart-params) "file")]
-      (flashFile)))
+          data (get-in request [:body "data"])]
+      (cond
+        (not (isValidFilename filename)) (bad-request "Bad filename")
+        (not (isValidFileData data)) (bad-request "Bad file data")
+        :else (flashFile filename data))))
+  
   (route/not-found "<h1>Page not found</h1>"))
+
 
 (def middleware
   (-> api

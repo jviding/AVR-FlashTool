@@ -9,6 +9,6 @@
                  [ring/ring-core "1.8.1"]
                  [ring/ring-jetty-adapter "1.8.1"]
                  [ring/ring-devel "1.8.1"]
-                 [ring/ring-json "0.5.0"]
+                 [ring/ring-json "0.5.1"]
                  [compojure "1.6.2"]]
   :main files.core)

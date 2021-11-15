@@ -1,0 +1,164 @@
+{
+	"info": {
+		"_postman_id": "6858f1fb-5e59-4800-9d47-56afab047f14",
+		"name": "AVR-FlashTool API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getMCULibs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "getFilenames",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/filenames",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"filenames"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getFile",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "createFile",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/file/test3.asm",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"file",
+						"test3.asm"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteFile",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/file/test3.asm",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"file",
+						"test3.asm"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "saveFile",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"data\":\"aqwesd\\nasda\\naqwesd\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/file/save/test1.asm",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"file",
+						"save",
+						"test1.asm"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "buildFile",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"data\":\"asd\\nqwe\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/file/build/test1.asm",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"file",
+						"build",
+						"test1.asm"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "flashFile",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"data\":\"asd\\nqwe\\nasd\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/file/flash/test1.asm",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"file",
+						"flash",
+						"test1.asm"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
