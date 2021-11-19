@@ -36,7 +36,16 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": null
+				"url": {
+					"raw": "{{url}}/file/test.asm",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"file",
+						"test.asm"
+					]
+				}
 			},
 			"response": []
 		},

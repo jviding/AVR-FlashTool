@@ -22,6 +22,7 @@ services:
     volumes:
       - ./app/api:/app
       - ./uploads:/uploads
+      - ./app/api/mcuLibs.txt:/data/mcuLibs.txt
     ports:
       - "9090:9090"
     working_dir: /app

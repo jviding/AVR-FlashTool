@@ -1,6 +1,7 @@
 (ns api.endpoints.file
     (:require
      [clojure.java.io :as io]
+     [api.lib.shell :refer [runCompile, runFlash]]
      [ring.util.response :refer [file-response, response, bad-request]]))
 
 (def uploadsDir "/uploads/")
@@ -11,11 +12,10 @@
     (.exists (io/file (str uploadsDir filename))))
 
 (defn- writeFile [filename, data]
-    (with-open [w (io/writer (str uploadsDir filename))]
-        (.write w data)))
+    (spit (str uploadsDir filename) data))
 
 (defn- readFile [filename]
-    (slurp (io/file (str uploadsDir filename))))
+    (slurp (str uploadsDir filename)))
 
 ;; PUBLIC
 
@@ -49,10 +49,10 @@
     (cond
         (not (fileExists filename)) (bad-request "No such file")
         :else (do (writeFile filename data)
-            (response {:message (str "Built " filename)}))))
+            (response {:message (runCompile (str uploadsDir filename))}))))
 
 (defn flashFile [filename, data]
     (cond
         (not (fileExists filename)) (bad-request "No such file")
         :else (do (writeFile filename data)
-            (response {:message (str "Flashed " filename)}))))
+            (response {:message (runFlash (str uploadsDir filename))}))))
