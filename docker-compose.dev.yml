@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
 
+  # TODO: Requires CORS or internal forwarding (/api/* -> api)
 #  front:
 #    build:
 #      context: ./app/front
