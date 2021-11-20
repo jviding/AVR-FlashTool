@@ -22,9 +22,9 @@ do
     TARGET_MCU=$(echo "$TARGET_MCU" | xargs echo -n)
 
     JSON="{\"mcu\":\"$TARGET_MCU\",\"lib\":\"$FILE\"},"
-    echo "$JSON" >> $OUTPUT_FILE
+    echo -n "$JSON" >> $OUTPUT_FILE
 done
 
 # Remove last ','
-$(truncate -s-2 $OUTPUT_FILE)
+$(truncate -s-1 $OUTPUT_FILE)
 echo -n "]" >> $OUTPUT_FILE

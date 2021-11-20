@@ -1,25 +1,22 @@
+import HTTP from './libs/http'
+const API_URL = 'http://localhost:8080/api'
+
+// TODO: Use interface -> const API: API = { ...
+interface API {
+    getMcuLibs(): Promise<[{ mcu: string, lib: string }]>,
+    getFilenames(): Promise<string[]>
+}
+
 const API = {
 
     getMCULibs: () => {
-        const MCU_LIBS = [
-            {
-                mcu: 'ATtiny85',
-                lib: 'at85def.asm'
-            },
-            {
-                mcu: 'ATtiny45',
-                lib: 'at45def.asm'
-            },
-            {
-                mcu: 'SomeX',
-                lib: 'atXXdef.asm'
-            }
-        ]
-        return Promise.resolve(MCU_LIBS)
+        const URL = API_URL + '/mcuLibs'
+        return HTTP.get(URL).then((res) => { return JSON.parse(res).mcuLibs })
     },
 
     getFilenames: () => {
-        return Promise.resolve(['file_one.asm', 'file_two.asm', 'file_three.asm', 'x.asm', 'x.asm', 'x.asm', 'x.asm', 'x.asm', 'x.asm', 'x.asm', 'x.asm', 'x.asm'])
+        const URL = API_URL + '/filenames'
+        return HTTP.get(URL).then((res) => { return JSON.parse(res).filenames })
     },
 
     getFile: (filename: string) => {

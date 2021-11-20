@@ -39,6 +39,12 @@ module.exports = {
     devServer: {
         allowedHosts: ['*'],
         port: 8080,
+        proxy: {
+            '/api': {
+                target: 'http://api:9090',
+                pathRewrite: { '^/api': '' }
+            }
+        },
         static: {
             directory: './static/',
             publicPath: '/'

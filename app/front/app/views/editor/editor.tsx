@@ -157,7 +157,7 @@ export default class Editor extends React.Component <Props, IState> {
                         </div>
                         <div className={style.cell}>
                             <select 
-                                defaultValue={this.state.mcu}
+                                defaultValue={this.state.mcu || 'Unknown' }
                                 onChange={(event) => this.handleSelectionChange(this.state.mcuLibs[event.target.options.selectedIndex])} >
                                 {this.getMCUSelectOptions()}
                             </select>
