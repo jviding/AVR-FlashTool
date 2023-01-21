@@ -2,6 +2,10 @@
 You should have a Raspberry Pi set up with Raspbian.<br>
 Here Raspberry Pi model 3B+ is used with Raspbian Buster 2021-05-07.
 
+To verify the RPi Pins work and emit current as expected:
+1. Connect a led to Pin 12 (remember to add a resistor!)
+2. Run the script: led_blink.py
+
 ## 1. Install avrdude
 Install prerequisites:
 >$ sudo apt update && sudo apt upgrade -y <br>
