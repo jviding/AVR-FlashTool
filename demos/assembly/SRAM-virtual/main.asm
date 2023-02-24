@@ -28,9 +28,8 @@ loop:
     rjmp loop
 
 setPointer:
-  in R16, PINC    ; Read memory address in
-  and R16, R20    ; Take last 4 bits (PC0:3)
-  ldi XL, R16     ; Set X as pointer to SRAM
+  in R26, PINC    ; Read memory address to XL
+  and R26, R20    ; Take last 4 bits (PC0:3)
     ret
 
 dataOut:
