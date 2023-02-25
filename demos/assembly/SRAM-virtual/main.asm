@@ -28,16 +28,20 @@ loop:
     rjmp loop
 
 setPointer:
-  in R26, PINC    ; Read memory address to XL
-  and R26, R20    ; Take last 4 bits (PC0:3)
+  in R26, PINC    ; Read PC0:4 to XL
+  and R26, R20    ; Use only PC0:3 (memory address in)
     ret
 
 dataOut:
   ld R16, X       ; Load from SRAM
-  out PORTD, R16  ; Write data out
+  out PORTD, R16  ; Write data out (PD0:7)
     ret
 
 dataIn:
-  in R16, PINB    ; Read data in
-  st X, R16       ; Write to SRAM
+  in R17, PINB    ; Read data in (PB0:7)
+  cp R17, R16     ; Same as output?
+  brne continue   ; If not, continue
+    ret
+continue:
+  st X, R17       ; Write to SRAM
     ret
