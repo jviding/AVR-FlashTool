@@ -26,8 +26,9 @@ init:
   ldi R16, 0b00000000 ; 0x00
   out DDRA, R16       ; PA0:3 low for input
   out DDRB, R16       ; PB4:6 low for input
-  ldi R16, 0b00001111 ; 0x0F
-  out DDRB, R16       ; PB0:3 high for output
+  ldi R17, 0b00001111 ; 0x0F
+  out DDRB, R17       ; PB0:3 high for output
+  out PORTB, R16      ; Output PA0:3 low
 
 main:
   ldi R16, 0b00000000 ; 0x00 - Count from zero
@@ -35,12 +36,13 @@ main:
   ldi R18, 0b01100001 ; 0x61 - Count: Enabled
 
 loop:
-  sbic PINB, 4    ; Skip if not reading
+  sbic PINB, 4     ; Skip if not reading
     rcall tryRead  ;   Read new counter value
-  sbic PINB, 5    ; Skip if not counting
+  sbic PINB, 5     ; Skip if not counting
     rcall tryCount ;   Increment counter value
-  sbis PINB, 6    ; Skip if clock high
+  sbis PINB, 6     ; Skip if clock high
     rcall enable   ;   Enable read & count
+  out PORTB, R16   ; Counter value out
     rjmp loop
 
 tryRead:
